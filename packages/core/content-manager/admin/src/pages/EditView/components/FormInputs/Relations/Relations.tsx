@@ -752,7 +752,10 @@ const RelationModalWithContext = ({
 
   React.useLayoutEffect(() => {
     setTextValue('');
-  }, [fieldValue]);
+    // Keep the search query in sync with the cleared input so the remaining entries are
+    // fetched right away instead of keeping the results of the previous (now stale) search.
+    setSearchParams((s) => (s._q === '' ? s : { ...s, _q: '', page: 1 }));
+  }, [fieldValue, setSearchParams]);
 
   const handleSearch = async (search: string) => {
     setSearchParams((s) => ({ ...s, _q: search, page: 1 }));
